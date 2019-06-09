@@ -62,4 +62,3 @@ class ContactHelper:
         # submit_deletion
         wd.find_element_by_value("Delete").click()
         wd.switch_to_alert().accept()
-        wd.find_element_by_name("user")

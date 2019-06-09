@@ -41,4 +41,3 @@ class GroupHelper:
         wd = self.app.wd
         # return to group's page
         wd.find_element_by_link_text("group page").click()
-
