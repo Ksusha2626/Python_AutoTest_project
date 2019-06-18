@@ -25,11 +25,6 @@ class ContactHelper:
         self.change_date("bmonth", contact.bmonth)
         self.change_field_value("byear", contact.byear)
 
-    #        wd.find_element_by_name("bday").click()
-    #        Select(wd.find_element_by_name("bday")).select_by_visible_text(contact.bday)
-    #        wd.find_element_by_name("bmonth").click()
-    #        Select(wd.find_element_by_name("bmonth")).select_by_visible_text(contact.bmonth)
-
     def change_field_value(self, field_name, text, ):
         wd = self.app.wd
         if text is not None:
@@ -67,8 +62,13 @@ class ContactHelper:
         # submit_deletion
         wd.find_element_by_xpath("//input[@value='Delete']").click()
         wd.switch_to_alert().accept()
-        self.return_home_page()
+        self.open_home_page()
 
     def return_home_page(self):
         wd = self.app.wd
         wd.find_element_by_link_text("home page").click()
+
+    def count(self):
+        wd = self.app.wd
+        self.open_home_page()
+        return len(wd.find_elements_by_name("selected[]"))
