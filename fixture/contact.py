@@ -13,29 +13,35 @@ class ContactHelper:
     def fill_form(self, contact):
         wd = self.app.wd
         # fill contact form
-        wd.find_element_by_name("firstname").clear()
-        wd.find_element_by_name("firstname").send_keys(contact.name)
-        wd.find_element_by_name("middlename").clear()
-        wd.find_element_by_name("middlename").send_keys(contact.middlename)
-        wd.find_element_by_name("lastname").clear()
-        wd.find_element_by_name("lastname").send_keys(contact.lastname)
-        wd.find_element_by_name("mobile").clear()
-        wd.find_element_by_name("mobile").send_keys(contact.mobile_tel)
-        wd.find_element_by_name("work").clear()
-        wd.find_element_by_name("work").send_keys(contact.work_tel)
-        wd.find_element_by_name("email").clear()
-        wd.find_element_by_name("email").send_keys(contact.email)
-        wd.find_element_by_name("homepage").clear()
-        wd.find_element_by_name("homepage").send_keys(contact.page)
-        wd.find_element_by_name("bday").click()
-        Select(wd.find_element_by_name("bday")).select_by_visible_text(contact.bday)
-        wd.find_element_by_name("bday").click()
-        wd.find_element_by_name("bmonth").click()
-        Select(wd.find_element_by_name("bmonth")).select_by_visible_text(contact.bmonth)
-        wd.find_element_by_name("bmonth").click()
-        wd.find_element_by_name("byear").click()
-        wd.find_element_by_name("byear").clear()
-        wd.find_element_by_name("byear").send_keys(contact.byear)
+        self.change_field_value("firstname", contact.name)
+        self.change_field_value("middlename", contact.middlename)
+        self.change_field_value("lastname", contact.lastname)
+        self.change_field_value("mobile", contact.mobile_tel)
+        self.change_field_value("work", contact.work_tel)
+        self.change_field_value("email", contact.email)
+        self.change_field_value("homepage", contact.page)
+
+        self.change_date("bday", contact.bday)
+        self.change_date("bmonth", contact.bmonth)
+        self.change_field_value("byear", contact.byear)
+
+    #        wd.find_element_by_name("bday").click()
+    #        Select(wd.find_element_by_name("bday")).select_by_visible_text(contact.bday)
+    #        wd.find_element_by_name("bmonth").click()
+    #        Select(wd.find_element_by_name("bmonth")).select_by_visible_text(contact.bmonth)
+
+    def change_field_value(self, field_name, text, ):
+        wd = self.app.wd
+        if text is not None:
+            wd.find_element_by_name(field_name).click()
+            wd.find_element_by_name(field_name).clear()
+            wd.find_element_by_name(field_name).send_keys(text)
+
+    def change_date(self, field_name, date):
+        wd = self.app.wd
+        if date is not None:
+            wd.find_element_by_name(field_name).click()
+            Select(wd.find_element_by_name(field_name)).select_by_visible_text(date)
 
     def contact_form(self, contact):
         wd = self.app.wd
@@ -54,10 +60,6 @@ class ContactHelper:
         wd.find_element_by_xpath("(//input[@name='update'])[2]").click()
         self.return_home_page()
 
-    def return_home_page(self):
-        wd = self.app.wd
-        wd.find_element_by_link_text("home page").click()
-
     def delete_first_contact(self):
         wd = self.app.wd
         # select first contact
@@ -65,5 +67,8 @@ class ContactHelper:
         # submit_deletion
         wd.find_element_by_xpath("//input[@value='Delete']").click()
         wd.switch_to_alert().accept()
-        self.app.open_home_page()
+        self.return_home_page()
 
+    def return_home_page(self):
+        wd = self.app.wd
+        wd.find_element_by_link_text("home page").click()
