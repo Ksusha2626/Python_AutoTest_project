@@ -6,33 +6,29 @@ class ContactHelper:
     def __init__(self, app):
         self.app = app
 
-    def open_home_page(self):
-        wd = self.app.wd
-        wd.get("http://localhost/addressbook/")
-
     def fill_form(self, contact):
         wd = self.app.wd
         # fill contact form
-        self.change_field_value("firstname", contact.name)
-        self.change_field_value("middlename", contact.middlename)
-        self.change_field_value("lastname", contact.lastname)
-        self.change_field_value("mobile", contact.mobile_tel)
-        self.change_field_value("work", contact.work_tel)
-        self.change_field_value("email", contact.email)
-        self.change_field_value("homepage", contact.page)
+        self.fill_form_value("firstname", contact.name)
+        self.fill_form_value("middlename", contact.middlename)
+        self.fill_form_value("lastname", contact.lastname)
+        self.fill_form_value("mobile", contact.mobile_tel)
+        self.fill_form_value("work", contact.work_tel)
+        self.fill_form_value("email", contact.email)
+        self.fill_form_value("homepage", contact.page)
 
-        self.change_date("bday", contact.bday)
-        self.change_date("bmonth", contact.bmonth)
-        self.change_field_value("byear", contact.byear)
+        self.fill_form_date("bday", contact.bday)
+        self.fill_form_date("bmonth", contact.bmonth)
+        self.fill_form_value("byear", contact.byear)
 
-    def change_field_value(self, field_name, text, ):
+    def fill_form_value(self, field_name, text):
         wd = self.app.wd
         if text is not None:
             wd.find_element_by_name(field_name).click()
             wd.find_element_by_name(field_name).clear()
             wd.find_element_by_name(field_name).send_keys(text)
 
-    def change_date(self, field_name, date):
+    def fill_form_date(self, field_name, date):
         wd = self.app.wd
         if date is not None:
             wd.find_element_by_name(field_name).click()
@@ -61,8 +57,8 @@ class ContactHelper:
         wd.find_element_by_name("selected[]").click()
         # submit_deletion
         wd.find_element_by_xpath("//input[@value='Delete']").click()
-        wd.switch_to_alert().accept()
-        self.open_home_page()
+        wd.switch_to.alert.accept()
+        self.app.open_home_page()
 
     def return_home_page(self):
         wd = self.app.wd
@@ -70,5 +66,5 @@ class ContactHelper:
 
     def count(self):
         wd = self.app.wd
-        self.open_home_page()
+        self.app.open_home_page()
         return len(wd.find_elements_by_name("selected[]"))
