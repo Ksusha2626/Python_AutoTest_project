@@ -1,5 +1,6 @@
 from selenium.webdriver.support.ui import Select
 from model.contact import Contact
+import re
 
 
 class ContactHelper:
@@ -15,7 +16,9 @@ class ContactHelper:
         self.fill_form_value("lastname", contact.lastname)
         self.fill_form_value("mobile", contact.mobile_tel)
         self.fill_form_value("work", contact.work_tel)
+        self.fill_form_value("address", contact.address)
         self.fill_form_value("email", contact.email)
+        self.fill_form_value("email2", contact.email2)
         self.fill_form_value("homepage", contact.page)
 
         self.fill_form_date("bday", contact.bday)
@@ -62,7 +65,7 @@ class ContactHelper:
 
     def delete_contact_by_index(self, index):
         wd = self.app.wd
-        # select first contact
+        # select random contact
         wd.find_elements_by_name("selected[]")[index].click()
         # submit_deletion
         wd.find_element_by_xpath("//input[@value='Delete']").click()
@@ -90,6 +93,50 @@ class ContactHelper:
                 cells = element.find_elements_by_tag_name("td")
                 surname = cells[1].text
                 firstname = cells[2].text
+                address = cells[3].text
+                mails = cells[4].text
                 id = element.find_element_by_name("selected[]").get_attribute("value")
-                self.contact_cache.append(Contact(name=firstname, lastname=surname, id=id))
+                all_phones = cells[5].text
+                self.contact_cache.append(Contact(name=firstname, lastname=surname, id=id,
+                                                  all_phones_from_home_page=all_phones, address=address,
+                                                  all_mails=mails))
         return list(self.contact_cache)
+
+    def random_row(self, index, wd):
+        self.app.open_home_page()
+        row = wd.find_elements_by_name("entry")[index]
+        return row
+
+    def open_contact_to_edit_by_index(self, index):
+        wd = self.app.wd
+        row = self.random_row(index, wd)
+        cell = row.find_elements_by_tag_name("td")[7]
+        cell.find_element_by_tag_name("a").click()
+
+    def open_contact_view_by_index(self, index):
+        wd = self.app.wd
+        row = self.random_row(index, wd)
+        cell = row.find_elements_by_tag_name("td")[6]
+        cell.find_element_by_tag_name("a").click()
+
+    def get_contact_info_from_edit_page(self, index):
+        wd = self.app.wd
+        self.open_contact_to_edit_by_index(index)
+        name = wd.find_element_by_name('firstname').get_attribute('value')
+        lastname = wd.find_element_by_name('lastname').get_attribute('value')
+        id = wd.find_element_by_name('id').get_attribute('value')
+        address = wd.find_element_by_name('address').get_attribute('value')
+        email = wd.find_element_by_name('email').get_attribute('value')
+        email2 = wd.find_element_by_name('email2').get_attribute('value')
+        mobile_tel = wd.find_element_by_name('mobile').get_attribute('value')
+        work_tel = wd.find_element_by_name('work').get_attribute('value')
+        return Contact(name=name, lastname=lastname, id=id, work_tel=work_tel, mobile_tel=mobile_tel, address=address,
+                       email=email, email2=email2)
+
+    def get_contact_from_view_page(self, index):
+        wd = self.app.wd
+        self.open_contact_view_by_index(index)
+        text = wd.find_element_by_id('content').text
+        mobile_tel = re.search("M: (.*)", text).group(1)
+        work_tel = re.search("W: (.*)", text).group(1)
+        return Contact(work_tel=work_tel, mobile_tel=mobile_tel)
