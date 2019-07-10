@@ -1,6 +1,6 @@
 from model.contact import Contact
 
-testdata = [
+testData = [
     Contact(name="Name1", middlename="middlename1", lastname="Lastname1", mobile_tel="mobile_tel1",
             work_tel="work_tel1", home_tel="home_tel1", email="email1", email2="email2_1", email3="email3_1",
             address="address1", page="page1", bday="6", bmonth="March", byear="1995"),

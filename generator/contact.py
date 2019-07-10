@@ -29,7 +29,7 @@ def random_string(prefix, maxlen):
     return prefix + "".join([random.choice(symbols) for i in range(random.randrange(maxlen))])
 
 
-testdata = [Contact(name="", middlename="", lastname="")] + [
+testData = [Contact(name="", middlename="", lastname="")] + [
     Contact(name=random_string("name", 10), middlename=random_string("middle", 10),
             lastname=random_string("111", 10), mobile_tel=random_string("123", 5),
             work_tel=random_string("567", 5), home_tel=random_string("098", 5),
@@ -43,4 +43,4 @@ file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", f)
 
 with open(file, "w") as out:
     jsonpickle.set_encoder_options("json", indent=2)
-    out.write(jsonpickle.encode(testdata))
+    out.write(jsonpickle.encode(testData))
