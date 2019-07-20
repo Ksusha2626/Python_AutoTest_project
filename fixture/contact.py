@@ -121,6 +121,13 @@ class ContactHelper:
         cell = row.find_elements_by_tag_name("td")[6]
         cell.find_element_by_tag_name("a").click()
 
+    def open_contact_to_edit_by_id(self, id):
+        wd = self.app.wd
+        self.app.open_home_page()
+        row = wd.find_element_by_xpath("//tr[@name='entry']/td/input[@value='%s']/../.." % id)
+        cell = row.find_elements_by_tag_name("td")[7]
+        cell.find_element_by_tag_name("a").click()
+
     def get_contact_info_from_edit_page(self, index):
         wd = self.app.wd
         self.open_contact_to_edit_by_index(index)
@@ -145,3 +152,25 @@ class ContactHelper:
         mobile_tel = re.search("M: (.*)", text).group(1)
         work_tel = re.search("W: (.*)", text).group(1)
         return Contact(home_tel=home_tel, mobile_tel=mobile_tel,  work_tel=work_tel)
+
+    def delete_contact_by_id(self, id):
+        wd = self.app.wd
+        # select contact
+        wd.find_element_by_css_selector("input[value='%s']" % id).click()
+        # submit_deletion
+        wd.find_element_by_xpath("//input[@value='Delete']").click()
+        wd.switch_to.alert.accept()
+        self.app.open_home_page()
+        self.contact_cache = None
+
+    def edit_contact_form_by_id(self, id, contact):
+        wd = self.app.wd
+        # open edit page
+        self.open_contact_to_edit_by_id(id)
+        # wd.find_elements_by_xpath("//img[@alt='Edit']")[id].click()
+        # change contact form
+        self.fill_form(contact)
+        # submit changes
+        wd.find_element_by_xpath("(//input[@name='update'])[2]").click()
+        self.return_home_page()
+        self.contact_cache = None
