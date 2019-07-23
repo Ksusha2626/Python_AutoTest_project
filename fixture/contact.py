@@ -121,6 +121,10 @@ class ContactHelper:
         cell = row.find_elements_by_tag_name("td")[6]
         cell.find_element_by_tag_name("a").click()
 
+    def select_contact_by_id(self, id):
+        wd = self.app.wd
+        wd.find_element_by_css_selector("input[value='%s']" % id).click()
+
     def open_contact_to_edit_by_id(self, id):
         wd = self.app.wd
         self.app.open_home_page()
@@ -173,3 +177,11 @@ class ContactHelper:
         wd.find_element_by_xpath("(//input[@name='update'])[2]").click()
         self.return_home_page()
         self.contact_cache = None
+
+    def add_contact_to_group(self, contact_id, group_id):
+        wd = self.app.wd
+        self.app.open_home_page()
+        self.select_contact_by_id(contact_id)
+        wd.find_element_by_name("to_group").click()
+        Select(wd.find_element_by_css_selector("select[name='to_group']")).select_by_value('%s' % group_id)
+        wd.find_element_by_xpath("//input[@value='Add to']").click()
