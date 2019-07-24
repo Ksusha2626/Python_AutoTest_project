@@ -34,3 +34,9 @@ class Application:
 
     def stop(self):
         self.wd.quit()
+
+    def contacts_in_group_page(self, id_group):
+        wd = self.wd
+        if not (wd.current_url == "http://localhost/addressbook/?group=%s" % id_group
+                and len(wd.find_element_by_name("remove")) > 0):
+            wd.get("http://localhost/addressbook/?group=%s" % id_group)

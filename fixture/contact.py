@@ -185,3 +185,10 @@ class ContactHelper:
         wd.find_element_by_name("to_group").click()
         Select(wd.find_element_by_css_selector("select[name='to_group']")).select_by_value('%s' % group_id)
         wd.find_element_by_xpath("//input[@value='Add to']").click()
+
+    def delete_contact_from_group(self, id_group):
+        wd = self.app.wd
+        self.app.contacts_in_group_page(id_group)
+        wd.find_element_by_name("selected[]").click()
+        wd.find_element_by_name("remove").click()
+

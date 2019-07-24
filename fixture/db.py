@@ -47,8 +47,21 @@ class DbFixture:
             for row in cursor:
                 (id, name, lastname, address, mobile_tel, home_tel, work_tel, email, email2, email3) = row
                 list = (Contact(id=str(id), name=name, lastname=lastname, address=address,
-                                    mobile_tel=mobile_tel, home_tel=home_tel, work_tel=work_tel, email=email,
-                                    email2=email2, email3=email3))
+                                mobile_tel=mobile_tel, home_tel=home_tel, work_tel=work_tel, email=email,
+                                email2=email2, email3=email3))
+        finally:
+            cursor.close()
+        return list
+
+    def get_groups_with_contacts(self):
+        list = []
+        cursor = self.connection.cursor()
+        try:
+            cursor.execute("select group_id from address_in_groups")
+            for row in cursor:
+                (id,) = row
+                list.append(Group(id=str(id)))
+
         finally:
             cursor.close()
         return list
