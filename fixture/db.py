@@ -65,3 +65,4 @@ class DbFixture:
         finally:
             cursor.close()
         return list
+
