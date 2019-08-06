@@ -33,13 +33,4 @@ def merge_emails(contact):
                             map(lambda x: clear(x),
                                 filter(lambda x: x is not None, [contact.email, contact.email2, contact.email3]))))
 
-# old_contact = app.contact.get_contact_list()
-# index = randrange(len(old_contact))
-# contact_info_from_home_page = app.contact.get_contact_list()[index]
-# contact_info_from_edit_page = app.contact.get_contact_info_from_edit_page(index)
-# assert contact_info_from_home_page.name == contact_info_from_edit_page.name
-# assert contact_info_from_home_page.lastname == contact_info_from_edit_page.lastname
-# assert contact_info_from_home_page.address == contact_info_from_edit_page.address
-# assert contact_info_from_home_page.all_mails == merge_emails(contact_info_from_edit_page)
-# assert contact_info_from_home_page.all_phones_from_home_page == merge_phones_on_home_page(
-#     contact_info_from_edit_page)
+
